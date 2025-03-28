@@ -81,7 +81,17 @@ export default function UserList() {
     <div className="bg-gray-100 h-full flex items-center justify-center">
       <div>
         <div className="w-[90vw] md:w-[70vw] lg:w-[50vw] min-w-70 bg-white shadow-lg rounded-lg p-6 my-3">
-          <h2 className="text-xl font-semibold mb-4">List of all users</h2>
+        <div className="flex justify-between items-center mt-4">
+  <span className="text-xl font-semibold mb-4">List of all users</span>
+  <a href="https://portfolio-sigma-one-53.vercel.app/" target="blank">
+  <button
+    className="bg-blue-600 px-4 py-1 mb-4 rounded-full text-white"
+  >
+    About Me
+  </button>
+  </a>
+</div>
+
           {loading && <p className="text-center">Loading...</p>}
           <div className="flex flex-col">
             {users.map((user) => (
@@ -226,6 +236,8 @@ export default function UserList() {
               Logout
             </button>
           </div>
+
+         
         </div>
       </div>
     </div>
