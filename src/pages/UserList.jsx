@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 export default function UserList() {
   const navigate = useNavigate();
-
+  const [searchQuery, setSearchQuery] = useState("");  
+  const [searching, setSearching] = useState(false);  
+  
   const [users, setUsers] = useState([]);
   const [page, setpage] = useState(1);
   const [data, setdata] = useState();
@@ -14,42 +16,42 @@ export default function UserList() {
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(()=>{
-   const token = localStorage.getItem("APtoken");
-   if(!token){
-    navigate("/login")
-   }
-  },[navigate])
-
   useEffect(() => {
-    const getUsers = async () => {
-      try {
-        setLoading(true);
-        const resp = await axios.get(`${BaseUrl}api/users?page=${page}`);
-        setUsers(resp.data.data);
-        setMaxpages(resp.data.total_pages);
-        setdata(resp.data);
-      } catch (error) {
-        toast.error("Failed to fetch users");
-      } finally {
-        setLoading(false);
-      }
-    };
+    const token = localStorage.getItem("APtoken");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const getUsers = async () => {
+    try {
+      setLoading(true);
+      const resp = await axios.get(`${BaseUrl}api/users?page=${page}`);
+      setUsers(resp.data.data);
+      setMaxpages(resp.data.total_pages);
+      setdata(resp.data);
+    } catch (error) {
+      toast.error("Failed to fetch users");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     getUsers();
   }, [page]);
 
-  const handleSave = async (id, first_name, last_name, email,avatar) => {
-    if(!id && !first_name && !last_name && !email){
-        toast.error("Enter all details");
-        return;
-    } 
+  const handleSave = async (id, first_name, last_name, email, avatar) => {
+    if (!id && !first_name && !last_name && !email) {
+      toast.error("Enter all details");
+      return;
+    }
     try {
       const resp = await axios.put(`${BaseUrl}api/users/${id}`, {
         id,
         first_name,
         last_name,
         email,
-        avatar
+        avatar,
       });
       toast.success("User updated");
       console.log(resp);
@@ -74,24 +76,69 @@ export default function UserList() {
     localStorage.removeItem("APtoken");
     toast.success("Logout Successfully.");
     navigate("/login");
-     
   };
+
+  const filteredUsers=()=>{
+      const filteredUser = users.filter(
+        (user) =>
+          user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+setUsers(filteredUser);
+  }
+
 
   return (
     <div className="bg-gray-100 h-full flex items-center justify-center">
       <div>
         <div className="w-[90vw] md:w-[70vw] lg:w-[50vw] min-w-70 bg-white shadow-lg rounded-lg p-6 my-3">
-        <div className="flex justify-between items-center mt-4">
-  <span className="text-xl font-semibold mb-4">List of all users</span>
-  <a href="https://portfolio-sigma-one-53.vercel.app/" target="blank">
-  <button
-    className="bg-blue-600 px-4 py-1 mb-4 rounded-full text-white"
-  >
-    About Me
-  </button>
-  </a>
-</div>
+          <div className="flex justify-between items-center mt-4">
+            <span className="text-xl font-semibold mb-4">
+              List of all users
+            </span>
+            <a href="https://portfolio-sigma-one-53.vercel.app/" target="blank">
+              <button className="bg-blue-600 px-4 py-1 mb-4 rounded-full text-white">
+                About Me
+              </button>
+            </a>
+          </div>
 
+          <div className="flex justify-between w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2">
+              <input
+                placeholder="Enter you Password"
+                type={"text"}
+                className="w-full  focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => {
+                    setSearching(true)
+                    setSearchQuery(e.target.value)
+                    filteredUsers()
+                }}
+                required
+              />
+            { !searching && <button
+                type="button"
+                onClick={() =>{
+                    filteredUsers()
+                    setSearching(true)
+                }
+                }
+              >
+                <div className="bg-green-600 text-white px-2 py-1 rounded-2xl">Search</div>
+              </button>}
+              { searching && <button
+                type="button"
+                onClick={() =>{
+                    filteredUsers()
+                    setSearching(false);
+                    getUsers();
+                }
+                }
+              >
+                <div className="bg-green-600 text-white px-2 py-1 rounded-2xl">Cancel</div>
+              </button>}
+            </div>
           {loading && <p className="text-center">Loading...</p>}
           <div className="flex flex-col">
             {users.map((user) => (
@@ -231,13 +278,13 @@ export default function UserList() {
           <div className="flex justify-center mt-4 ">
             <button
               className="bg-green-600 px-4 py-2 rounded-full text-white"
-              onClick={()=>{handleLogout()}}
+              onClick={() => {
+                handleLogout();
+              }}
             >
               Logout
             </button>
           </div>
-
-         
         </div>
       </div>
     </div>
