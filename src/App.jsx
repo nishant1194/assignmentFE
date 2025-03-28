@@ -1,35 +1,30 @@
-import { useState } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Login from "./pages/Login";
+ import Login from "./pages/Login";
 import Signup from "./pages/SignUp";
 import { Toaster } from "react-hot-toast";
 import UserList from "./pages/UserList";
-import { Navigate } from "react-router-dom";
-
-
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from 'react'
+ 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/login",
-      element: localStorage.getItem("APtoken") ? <Navigate to="/" /> : <Login />,
-    },
-    {
-      path:"/sign-up",
-      element: localStorage.getItem("APtoken") ? <Navigate to="/" /> : <Signup />,
-    },
-    {
-      path: "/",
-      element: <UserList />,
-    },
-     
-  ]);
 
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("APtoken");
+    setToken(storedToken); // Ensures state updates when token changes
+  }, []);
+
+ 
   return (
-    <>
-      <RouterProvider router={router}> </RouterProvider>
+   <>
+    <Routes>
+         <Route path="/" element={token ? <UserList /> : <Navigate to="/login" />} />
+        <Route path="/sign-up" element={!token ? <Signup /> : <Navigate to="/" />} />
+        <Route path="/login" element={!token ? <Login /> : <Navigate to="/" />} />
+       </Routes>
       <Toaster />
-    </>
-  );
+   </>
+   )
 }
 
-export default App;
+export default App

@@ -19,7 +19,7 @@ export default function UserList() {
    if(!token){
     navigate("/login")
    }
-  },[])
+  },[navigate])
 
   useEffect(() => {
     const getUsers = async () => {
@@ -71,9 +71,10 @@ export default function UserList() {
   };
 
   const handleLogout = async () => {
-    await localStorage.removeItem("APtoken");
+    localStorage.removeItem("APtoken");
+    toast.success("Logout Successfully.");
     navigate("/login");
-    toast.success("Logout Successfully");
+     
   };
 
   return (
@@ -220,7 +221,7 @@ export default function UserList() {
           <div className="flex justify-center mt-4 ">
             <button
               className="bg-green-600 px-4 py-2 rounded-full text-white"
-              onClick={handleLogout}
+              onClick={()=>{handleLogout()}}
             >
               Logout
             </button>

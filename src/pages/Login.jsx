@@ -35,7 +35,9 @@ const Login = () => {
     if (token) {
       navigate("/");
     }
-  }, []);
+
+    
+  }, [navigate]);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96 animate-fade-in">
@@ -98,66 +100,6 @@ const Login = () => {
     </div>
   );
 
-  // return (
-  //     <div className="min-h-screen bg-[#075e54] flex items-center justify-center">
-  //       <div className="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full">
-  //         <h2 className="text-3xl font-bold text-center text-[#075e54] mb-6">
-  //           Login
-  //         </h2>
-
-  //         <form onSubmit={handleSubmit} className="space-y-4">
-
-  //           {/* Email Field */}
-  //           <div className="flex items-center border-2 border-[#075e54] rounded-full px-4 py-3">
-  //             <Mail size={20} color="#075e54" />
-  //             <input
-  //               type="email"
-  //               name="email"
-
-  //               placeholder="Enter your email"
-  //               className="ml-3 w-full focus:outline-none text-lg"
-  //             />
-  //           </div>
-
-  //           {/* Password Field */}
-  //           <div className="flex items-center border-2 border-[#075e54] rounded-full px-4 py-3">
-  //             <Lock size={20} color="#075e54" />
-  //             <input
-  //               type={showPassword ? "text" : "password"}
-  //               name="password"
-
-  //               placeholder="Enter your password"
-  //               className="ml-3 w-full focus:outline-none text-lg"
-  //             />
-  //             <button
-  //               type="button"
-  //               onClick={() => setShowPassword(!showPassword)}
-  //             >
-  //               {showPassword ? (
-  //                 <EyeOff className="size-5 text-base-content/40" />
-  //               ) : (
-  //                 <Eye className="size-5 text-base-content/40" />
-  //               )}
-  //             </button>
-  //           </div>
-
-  //           <button
-  //             type="submit"
-  //             className="w-full bg-[#25d366] text-white py-3 rounded-full text-xl font-semibold hover:bg-[#128C7E] transition"
-  //           >
-  //             Login
-  //           </button>
-  //         </form>
-
-  //         <div className="text-center mt-4 text-sm text-gray-500">
-  //           Create a new account?{" "}
-  //           <a href="/signup" className="text-[#128C7E]">
-  //             SignUp
-  //           </a>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-};
+  };
 
 export default Login;
