@@ -38,16 +38,18 @@ export default function UserList() {
     getUsers();
   }, [page]);
 
-  const handleSave = async (id, first_name, last_name, email) => {
+  const handleSave = async (id, first_name, last_name, email,avatar) => {
     if(!id && !first_name && !last_name && !email){
         toast.error("Enter all details");
         return;
     } 
     try {
       const resp = await axios.put(`${BaseUrl}api/users/${id}`, {
+        id,
         first_name,
         last_name,
         email,
+        avatar
       });
       toast.success("User updated");
       console.log(resp);
@@ -163,7 +165,8 @@ export default function UserList() {
                           user.id,
                           user.first_name,
                           user.last_name,
-                          user.email
+                          user.email,
+                          user.avatar
                         )
                       }
                     >
